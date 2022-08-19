@@ -87,7 +87,11 @@ def verify_password(username, password):
 @auth.login_required
 def get_token():
     token = g.user.generate_auth_token()
-    return jsonify({"token": token, "duration": 600})
+    #Make dictionaries more beautiful ;p
+    token_data = {}
+    token_data["token"] = token
+    token_data["duration"] = 600
+    return jsonify(token_data)
 
 
 @app.route("/register", methods=["POST"])
@@ -99,8 +103,10 @@ def register():
     user = User(username=username)
     user.hash_password(password)
     user.save()
-
-    return jsonify({"user": user}), 201
+    #Make dictionaries more beautiful ;p
+    register_data = {}
+    register_data["user"] = user
+    return jsonify(register_data), 201
 
 
 @app.route("/create-quote", methods=["POST"])
@@ -113,15 +119,20 @@ def create_quote():
 
     quote = Quote(text=text, author=g.user)
     quote.save()
-
-    return jsonify({"quote": quote}), 201
+    #Make dictionaries more beautiful ;p
+    quote_data = {}
+    quote_data["quote"] = quote
+    return jsonify(quote_data), 201
 
 
 @app.route("/get-all-quotes")
 @auth.login_required
 def get_all_quotes():
     quotes = Quote.objects()
-    return jsonify({"quotes": quotes}), 200
+    #Make dictionaries more beautiful ;p
+    quotes_data = {}
+    quotes_data["quotes"] = quotes
+    return jsonify(quotes_data), 200
 
 
 @app.route("/get-my-quotes")
@@ -129,8 +140,10 @@ def get_all_quotes():
 def get_user_quotes():
     user_id = g.user.id
     quotes = Quote.objects(author=user_id)
-
-    return jsonify({"quotes": quotes}), 200
+    #Make dictionaries more beautiful ;p
+    quotes_data = {}
+    quotes_data["quotes"] = quotes
+    return jsonify(quotes_data), 200
 
 
 @app.route("/update-quote", methods=["PUT"])
@@ -149,8 +162,10 @@ def update_quote():
 
     quote.text = new_text
     quote.save()
-
-    return jsonify({"quote": quote}), 200
+    #Make dictionaries more beautiful ;p
+    quote_data = {}
+    quote_data["quote"] = quote
+    return jsonify(quote_data), 200
 
 
 @app.route("/delete-quote", methods=["DELETE"])
@@ -167,8 +182,9 @@ def delete_quote():
         abort(400)
 
     quote.delete()
-
-    return jsonify({"status": "deleted successfully"}), 200
+    status_message = {}
+    status_message["status"] = "deleted successfully"
+    return jsonify(status_message), 200
 
 
 if __name__ == "__main__":
